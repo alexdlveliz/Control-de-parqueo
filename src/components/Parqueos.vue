@@ -5,7 +5,7 @@
       <div class="sec">
         <div class="parqueo">
           <h2># 1</h2>
-          <button class="button type1">RESERVAR</button>
+          <button class="button type1" @click="getInfo">RESERVAR</button>
         </div>
         <div class="parqueo">
           <h2># 2</h2>
@@ -29,8 +29,33 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Parqueos",
+  data() {
+    return {
+      info: "",
+    };
+  },
+  methods: {
+    getInfo() {
+      var config = {
+        method: "get",
+        url: "http://localhost:3000/parking",
+        headers: {},
+        data: "",
+      };
+
+      axios(config)
+        .then(function(response) {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+  },
 };
 </script>
 
