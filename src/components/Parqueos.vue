@@ -5,7 +5,8 @@
       <div class="sec">
         <div class="parqueo">
           <h1>#1</h1>
-          <button>reservar</button>
+          <p>El pokemon es {{ pokemon }}</p>
+          <button @click="pruebaPost">reservar</button>
         </div>
         <div class="parqueo">
           <h1>#2</h1>
@@ -30,13 +31,41 @@
 <script>
 export default {
   name: "Parqueos",
+  data() {
+    return {
+      pokemon: "",
+    };
+  },
+  methods: {
+    async pruebaGet() {
+      const getPokemon = await fetch("https://pokeapi.co/api/v2/pokemon/12/")
+        .then((res) => res.json())
+        .catch((err) => console.log(err));
+      this.pokemon = getPokemon.name;
+    },
+    async pruebaPost() {
+      var raw =
+        '[\n    {\n        "position": 1,\n        "taken": false\n    }\n]';
+
+      var requestOptions = {
+        method: "POST",
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch("http://localhost:3000/parking", requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+    },
+  },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .body {
-  margin: 0;
+  margin: 0px;
   padding: 25px;
   background-color: blueviolet;
   display: flex;
