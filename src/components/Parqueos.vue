@@ -5,7 +5,7 @@
       <div class="sec">
         <div class="parqueo">
           <h2># 1</h2>
-          <button class="button type1">RESERVAR</button>
+          <button class="button type1" @click="getInfo">RESERVAR</button>
         </div>
         <div class="parqueo">
           <h2># 2</h2>
@@ -29,34 +29,31 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Parqueos",
   data() {
     return {
-      pokemon: "",
+      info: "",
     };
   },
   methods: {
-    async pruebaGet() {
-      const getPokemon = await fetch("https://pokeapi.co/api/v2/pokemon/12/")
-        .then((res) => res.json())
-        .catch((err) => console.log(err));
-      this.pokemon = getPokemon.name;
-    },
-    async pruebaPost() {
-      var raw =
-        '[\n    {\n        "position": 1,\n        "taken": false\n    }\n]';
-
-      var requestOptions = {
-        method: "POST",
-        body: raw,
-        redirect: "follow",
+    getInfo() {
+      var config = {
+        method: "get",
+        url: "http://localhost:3000/parking",
+        headers: {},
+        data: "",
       };
 
-      fetch("http://localhost:3000/parking", requestOptions)
-        .then((response) => response.text())
-        .then((result) => console.log(result))
-        .catch((error) => console.log("error", error));
+      axios(config)
+        .then(function(response) {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
   },
 };
