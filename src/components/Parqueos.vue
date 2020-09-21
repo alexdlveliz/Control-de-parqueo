@@ -221,7 +221,24 @@ export default {
   padding: 25px;
   background-color: cornsilk;
 }
-.estadisticas h1 {
-  color: #1b4965;
+
+@media only screen and (max-width: 423px) {
+  .body h1 {
+    font-size: 35px;
+  }
+  .parqueo {
+    width: 65%;
+    height: 45%;
+    padding: 5px;
+    margin: 10px;
+  }
+  .parqueo h2 {
+    font-size: 30px;
+  }
+  .button {
+    padding: 0.5em 0.5em;
+    margin-bottom: 1em;
+    font-size: 8px;
+  }
 }
 </style>
