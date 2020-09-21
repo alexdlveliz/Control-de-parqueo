@@ -2,24 +2,25 @@
   <div class="body">
     <h1>Parqueos</h1>
     <div class="parqueos">
+      <button @click="getData">Refrescar</button>
       <div class="sec">
-        <div class="parqueo">
+        <div :class="{ parqueo: parqueo1 == false, parqueo_ocupado: parqueo1 == true }">
           <h2># 1</h2>
-          <button class="button type1" @click="getInfo">RESERVAR</button>
+          <button class="button type1" @click="reservar(1)">RESERVAR</button>
         </div>
-        <div class="parqueo">
+        <div :class="{ parqueo: parqueo2 == false, parqueo_ocupado: parqueo2 == true }">
           <h2># 2</h2>
-          <button class="button type1">RESERVAR</button>
+          <button class="button type1" @click="reservar(2)">RESERVAR</button>
         </div>
       </div>
       <div class="sec">
-        <div class="parqueo">
+        <div :class="{ parqueo: parqueo3 == false, parqueo_ocupado: parqueo3 == true }">
           <h2># 3</h2>
-          <button class="button type1">RESERVAR</button>
+          <button class="button type1" @click="reservar(3)">RESERVAR</button>
         </div>
-        <div class="parqueo">
+        <div :class="{ parqueo: parqueo4 == false, parqueo_ocupado: parqueo4 == true }">
           <h2># 4</h2>
-          <button class="button type1">RESERVAR</button>
+          <button class="button type1" @click="reservar(4)">RESERVAR</button>
         </div>
       </div>
     </div>
@@ -35,26 +36,65 @@ export default {
   name: "Parqueos",
   data() {
     return {
-      info: "",
+      data: "",
+      parqueo1: false,
+      parqueo2: false,
+      parqueo3: true,
+      parqueo4: true
     };
   },
   methods: {
-    getInfo() {
-      var config = {
-        method: "get",
-        url: "http://localhost:3000/parking",
-        headers: {},
-        data: "",
+    async getData() {
+      // Llamada a la API para obtener parqueos
+      let data = await fetch("http://localhost:3000/parking")
+        .then((res) => res.json());
+      this.data = data;
+      // console.log(this.data[0].record[this.data[0].record.length - 1].taken);
+      this.parqueo1 = this.data[0].record[this.data[0].record.length - 1].taken;
+      this.parqueo2 = this.data[1].record[this.data[1].record.length - 1].taken;
+      this.parqueo3 = this.data[2].record[this.data[2].record.length - 1].taken;
+      this.parqueo4 = this.data[3].record[this.data[3].record.length - 1].taken;
+    },
+    ciclo() {
+      let interval = setInterval(async function () {
+        let cont = 10;
+        cont--;
+        let data = await fetch("http://localhost:3000/parking")
+          .then((res) => res.json());
+        this.data = data;
+
+        for (let i = 0; i < this.data.length; i++) {
+          this.info[i] = this.data[i].record[this.data[i].record.length - 1].taken;
+        }
+        if (cont < 1) {
+          clearInterval(interval);
+        }
+      }, 10000);
+    },
+    async reservar(position) {
+      let id = this.data[position - 1].id;
+      var raw = JSON.parse(
+        `    {\n        "position": ${position},\n        "record": [\n            {\n                "taken": true\n            }\n        ]\n    }`
+      );
+      var requestOptions = {
+        method: "PUT",
+        body: raw,
+        redirect: "follow",
       };
 
-      axios(config)
-        .then(function(response) {
-          console.log(JSON.stringify(response.data));
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+      // Llamada a la API para actualizar
+      fetch(`http://localhost:3000/parking/${id}`, requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+
+      // // Llamada a la API para actualizar la información de la página
+      // this.getData();
     },
+  },
+  created() {
+    this.getData();
+    // this.ciclo();
   },
 };
 </script>
@@ -109,11 +149,33 @@ export default {
   background-color: #cae9ff;
   border-radius: 15px;
 }
+
+.parqueo_ocupado {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 60%;
+  height: 55%;
+  padding: 25px;
+  margin: 20px;
+  background-color: #8d99ae;
+  border-radius: 15px;
+}
+
 .parqueo h2 {
   color: #1b4965;
   font-family: "Fredoka One", cursive;
   font-size: 40px;
 }
+
+.parqueo_ocupado h2 {
+  color: #1b4965;
+  font-family: "Fredoka One", cursive;
+  font-size: 40px;
+}
+
 .button {
   position: relative;
   border: none;
