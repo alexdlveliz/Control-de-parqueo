@@ -2,7 +2,6 @@
   <div class="body">
     <h1>Parqueos</h1>
     <div class="parqueos">
-      <button @click="getData">Refrescar</button>
       <div class="sec">
         <div :class="{ parqueo: parqueo1 == 2, parqueo_reservado: parqueo1 == 3, parqueo_ocupado: parqueo1 == 1 }">
           <h2># 1</h2>
@@ -55,23 +54,6 @@ export default {
       this.parqueo4 = this.data[3].record[this.data[3].record.length - 1].taken;
     },
 
-    ciclo() {
-      let interval = setInterval(async function () {
-        let cont = 10;
-        cont--;
-        let data = await fetch("http://localhost:3000/parking")
-          .then((res) => res.json());
-        this.data = data;
-
-        for (let i = 0; i < this.data.length; i++) {
-          this.info[i] = this.data[i].record[this.data[i].record.length - 1].taken;
-        }
-        if (cont < 1) {
-          clearInterval(interval);
-        }
-      }, 10000);
-    },
-
     async reservar(position) {
       // Preparación de datos
       let id = this.data[position - 1].id;
@@ -102,12 +84,13 @@ export default {
   },
   created() {
     this.getData();
-    // this.ciclo();
+    var cycle = setInterval(() => {
+      this.getData();
+    }, 5000)
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Acme&family=Fredoka+One&family=Righteous&display=swap");
 .body {
