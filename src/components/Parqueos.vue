@@ -24,13 +24,12 @@
         </div>
       </div>
     </div>
-    <h1>Estadisticas</h1>
+    <h1>Estadísticas</h1>
     <div class="parqueos"></div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 
 export default {
   name: "Parqueos",
@@ -54,6 +53,7 @@ export default {
       this.parqueo2 = this.data[1].record[this.data[1].record.length - 1].taken;
       this.parqueo3 = this.data[2].record[this.data[2].record.length - 1].taken;
       this.parqueo4 = this.data[3].record[this.data[3].record.length - 1].taken;
+      console.log("actualizado");
     },
     ciclo() {
       let interval = setInterval(async function () {
@@ -72,24 +72,31 @@ export default {
       }, 10000);
     },
     async reservar(position) {
+      // Preparación de datos
       let id = this.data[position - 1].id;
-      var raw = JSON.parse(
-        `    {\n        "position": ${position},\n        "record": [\n            {\n                "taken": true\n            }\n        ]\n    }`
-      );
+      var raw = `{
+          "position": ${position},
+          "record": [
+            {
+              "taken": true
+            }
+          ]
+        }`;
       var requestOptions = {
         method: "PUT",
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: raw,
-        redirect: "follow",
+        redirect: "follow"
       };
 
       // Llamada a la API para actualizar
       fetch(`http://localhost:3000/parking/${id}`, requestOptions)
         .then((response) => response.text())
         .then((result) => console.log(result))
+        .then(() => this.getData())
         .catch((error) => console.log("error", error));
-
-      // // Llamada a la API para actualizar la información de la página
-      // this.getData();
     },
   },
   created() {
