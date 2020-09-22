@@ -4,21 +4,21 @@
     <div class="parqueos">
       <button @click="getData">Refrescar</button>
       <div class="sec">
-        <div :class="{ parqueo: parqueo1 == false, parqueo_ocupado: parqueo1 == true }">
+        <div :class="{ parqueo: parqueo1 == 2, parqueo_reservado: parqueo1 == 3, parqueo_ocupado: parqueo1 == 1 }">
           <h2># 1</h2>
           <button class="button type1" @click="reservar(1)">RESERVAR</button>
         </div>
-        <div :class="{ parqueo: parqueo2 == false, parqueo_ocupado: parqueo2 == true }">
+        <div :class="{ parqueo: parqueo2 == 2, parqueo_reservado: parqueo2 == 3, parqueo_ocupado: parqueo2 == 1 }">
           <h2># 2</h2>
           <button class="button type1" @click="reservar(2)">RESERVAR</button>
         </div>
       </div>
       <div class="sec">
-        <div :class="{ parqueo: parqueo3 == false, parqueo_ocupado: parqueo3 == true }">
+        <div :class="{ parqueo: parqueo3 == 2, parqueo_reservado: parqueo3 == 3, parqueo_ocupado: parqueo3 == 1 }">
           <h2># 3</h2>
           <button class="button type1" @click="reservar(3)">RESERVAR</button>
         </div>
-        <div :class="{ parqueo: parqueo4 == false, parqueo_ocupado: parqueo4 == true }">
+        <div :class="{ parqueo: parqueo4 == 2, parqueo_reservado: parqueo4 == 3, parqueo_ocupado: parqueo4 == 1 }">
           <h2># 4</h2>
           <button class="button type1" @click="reservar(4)">RESERVAR</button>
         </div>
@@ -36,10 +36,10 @@ export default {
   data() {
     return {
       data: "",
-      parqueo1: false,
-      parqueo2: false,
-      parqueo3: true,
-      parqueo4: true
+      parqueo1: 0,
+      parqueo2: 0,
+      parqueo3: 0,
+      parqueo4: 0
     };
   },
   methods: {
@@ -53,8 +53,8 @@ export default {
       this.parqueo2 = this.data[1].record[this.data[1].record.length - 1].taken;
       this.parqueo3 = this.data[2].record[this.data[2].record.length - 1].taken;
       this.parqueo4 = this.data[3].record[this.data[3].record.length - 1].taken;
-      console.log("actualizado");
     },
+
     ciclo() {
       let interval = setInterval(async function () {
         let cont = 10;
@@ -71,6 +71,7 @@ export default {
         }
       }, 10000);
     },
+
     async reservar(position) {
       // Preparación de datos
       let id = this.data[position - 1].id;
@@ -78,7 +79,7 @@ export default {
           "position": ${position},
           "record": [
             {
-              "taken": true
+              "taken": 3
             }
           ]
         }`;
@@ -157,7 +158,7 @@ export default {
   border-radius: 15px;
 }
 
-.parqueo_ocupado {
+.parqueo_reservado {
   display: flex;
   position: relative;
   flex-direction: column;
@@ -169,15 +170,31 @@ export default {
   margin: 20px;
   background-color: #8d99ae;
   border-radius: 15px;
+  button {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 }
 
-.parqueo h2 {
-  color: #1b4965;
-  font-family: "Fredoka One", cursive;
-  font-size: 40px;
+.parqueo_ocupado {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 60%;
+  height: 55%;
+  padding: 25px;
+  margin: 20px;
+  background-color: #ef233c;
+  border-radius: 15px;
+  button {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 }
 
-.parqueo_ocupado h2 {
+.parqueos h2 {
   color: #1b4965;
   font-family: "Fredoka One", cursive;
   font-size: 40px;
