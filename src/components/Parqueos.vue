@@ -3,49 +3,80 @@
     <h1>Parqueos</h1>
     <div class="parqueos">
       <div class="sec">
-        <div :class="{ parqueo: parqueo1 == 2, parqueo_reservado: parqueo1 == 3, parqueo_ocupado: parqueo1 == 1 }">
+        <div
+          :class="{
+            parqueo: parqueo1 == 2,
+            parqueo_reservado: parqueo1 == 3,
+            parqueo_ocupado: parqueo1 == 1,
+          }"
+        >
           <h2># 1</h2>
           <button class="button type1" @click="reservar(1)">RESERVAR</button>
         </div>
-        <div :class="{ parqueo: parqueo2 == 2, parqueo_reservado: parqueo2 == 3, parqueo_ocupado: parqueo2 == 1 }">
+        <div
+          :class="{
+            parqueo: parqueo2 == 2,
+            parqueo_reservado: parqueo2 == 3,
+            parqueo_ocupado: parqueo2 == 1,
+          }"
+        >
           <h2># 2</h2>
           <button class="button type1" @click="reservar(2)">RESERVAR</button>
         </div>
       </div>
       <div class="sec">
-        <div :class="{ parqueo: parqueo3 == 2, parqueo_reservado: parqueo3 == 3, parqueo_ocupado: parqueo3 == 1 }">
+        <div
+          :class="{
+            parqueo: parqueo3 == 2,
+            parqueo_reservado: parqueo3 == 3,
+            parqueo_ocupado: parqueo3 == 1,
+          }"
+        >
           <h2># 3</h2>
           <button class="button type1" @click="reservar(3)">RESERVAR</button>
         </div>
-        <div :class="{ parqueo: parqueo4 == 2, parqueo_reservado: parqueo4 == 3, parqueo_ocupado: parqueo4 == 1 }">
+        <div
+          :class="{
+            parqueo: parqueo4 == 2,
+            parqueo_reservado: parqueo4 == 3,
+            parqueo_ocupado: parqueo4 == 1,
+          }"
+        >
           <h2># 4</h2>
           <button class="button type1" @click="reservar(4)">RESERVAR</button>
         </div>
       </div>
     </div>
     <h1>Estadísticas</h1>
-    <div class="parqueos"></div>
+    <div class="parqueos">
+      <column-chart :data="chartData"></column-chart>
+    </div>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "Parqueos",
   data() {
     return {
+      chartData: [
+        ["2017-05-13", 2],
+        ["2017-05-14", 5],
+        ["2017-05-15", 4],
+      ],
       data: "",
       parqueo1: 0,
       parqueo2: 0,
       parqueo3: 0,
-      parqueo4: 0
+      parqueo4: 0,
     };
   },
   methods: {
     async getData() {
       // Llamada a la API para obtener parqueos
-      let data = await fetch("http://localhost:3000/parking")
-        .then((res) => res.json());
+      let data = await fetch("http://localhost:3000/parking").then((res) =>
+        res.json()
+      );
       this.data = data;
       // console.log(this.data[0].record[this.data[0].record.length - 1].taken);
       this.parqueo1 = this.data[0].record[this.data[0].record.length - 1].taken;
@@ -68,10 +99,10 @@ export default {
       var requestOptions = {
         method: "PUT",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: raw,
-        redirect: "follow"
+        redirect: "follow",
       };
 
       // Llamada a la API para actualizar
@@ -86,7 +117,7 @@ export default {
     this.getData();
     var cycle = setInterval(() => {
       this.getData();
-    }, 5000)
+    }, 5000);
   },
 };
 </script>

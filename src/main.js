@@ -1,13 +1,17 @@
-import Vue from 'vue'
-import App from './App.vue'
-import store from './store'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
+import Vue from "vue";
+import App from "./App.vue";
+import store from "./store";
+import axios from "axios";
+import VueAxios from "vue-axios";
+import Chartkick from "vue-chartkick";
+import Chart from "chart.js";
 
 Vue.use(VueAxios, axios);
-Vue.config.productionTip = false
+Vue.use(Chartkick.use(Chart));
+
+Vue.config.productionTip = false;
 
 new Vue({
   store,
-  render: h => h(App)
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount("#app");
