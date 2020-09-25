@@ -76,13 +76,12 @@ export default {
     async getData() {
       // Llamada a la API para obtener parqueos
       // Cambiar dependiendo del entorno
-      // let data = await fetch("http://54.152.205.229:3000/parking")
-      let data = await fetch("http://localhost:3000/parking")
+      let data = await fetch("http://35.173.252.111:3000/parking")
+      // let data = await fetch("http://localhost:3000/parking")
         .then((res) =>
         res.json()
       );
       this.data = data;
-      // console.log(this.data[0].record[this.data[0].record.length - 1].taken);
       this.parqueo1 = this.data[0].record[this.data[0].record.length - 1].taken;
       this.parqueo2 = this.data[1].record[this.data[1].record.length - 1].taken;
       this.parqueo3 = this.data[2].record[this.data[2].record.length - 1].taken;
@@ -111,8 +110,8 @@ export default {
 
       // Llamada a la API para actualizar
       // Cambiar dependiendo del entorno
-      // fecth(`http://54.152.205.229:3000/parking/${id}`, requestOptions)
-      fetch(`http://localhost:3000/parking/${id}`, requestOptions)
+      fetch(`http://35.173.252.111:3000/parking/${id}`, requestOptions)
+      // fetch(`http://localhost:3000/parking/${id}`, requestOptions)
         .then((response) => response.text())
         .then((result) => console.log(result))
         .then(() => this.getData())
