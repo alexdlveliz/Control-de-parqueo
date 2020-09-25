@@ -60,9 +60,10 @@ export default {
   data() {
     return {
       chartData: [
-        ["2017-05-13", 2],
-        ["2017-05-14", 5],
-        ["2017-05-15", 4],
+        ["parqueo 1", 1],
+        ["parqueo 2", 1],
+        ["parqueo 3", 1],
+        ["parqueo 4", 1],
       ],
       data: "",
       parqueo1: 0,
@@ -74,7 +75,10 @@ export default {
   methods: {
     async getData() {
       // Llamada a la API para obtener parqueos
-      let data = await fetch("http://localhost:3000/parking").then((res) =>
+      // Cambiar dependiendo del entorno
+      // let data = await fetch("http://54.152.205.229:3000/parking")
+      let data = await fetch("http://localhost:3000/parking")
+        .then((res) =>
         res.json()
       );
       this.data = data;
@@ -106,17 +110,29 @@ export default {
       };
 
       // Llamada a la API para actualizar
+      // Cambiar dependiendo del entorno
+      // fecth(`http://54.152.205.229:3000/parking/${id}`, requestOptions)
       fetch(`http://localhost:3000/parking/${id}`, requestOptions)
         .then((response) => response.text())
         .then((result) => console.log(result))
         .then(() => this.getData())
         .catch((error) => console.log("error", error));
     },
+
+    renderChart() {
+      this.chartData = [
+        ["parqueo 1", this.data[0].record.filter(x => x.taken == 2).length],
+        ["parqueo 2", this.data[1].record.filter(x => x.taken == 2).length],
+        ["parqueo 3", this.data[2].record.filter(x => x.taken == 2).length],
+        ["parqueo 4", this.data[3].record.filter(x => x.taken == 2).length]
+      ]
+    },
   },
   created() {
     this.getData();
     var cycle = setInterval(() => {
       this.getData();
+      this.renderChart();
     }, 5000);
   },
 };
